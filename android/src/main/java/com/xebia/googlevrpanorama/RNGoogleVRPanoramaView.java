@@ -126,9 +126,9 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
     public void onAfterUpdateTransaction() {
         panoWidgetView = new VrPanoramaView(_activity);
         panoWidgetView.setEventListener(new ActivityEventListener());
-        panoWidgetView.setCardboardButtonEnabled(showStereo);
-        panoWidgetView.setInfoButtonEnabled(showInfo);
-        panoWidgetView.setFullscreenButtonEnabled(showFullScreen);
+        panoWidgetView.setEnableCardboardButton(showStereo);
+        panoWidgetView.setEnableInfoButton(showInfo);
+        panoWidgetView.setEnableFullscreenButton(showFullScreen);
         this.addView(panoWidgetView);
 
         if (imageLoaderTask != null) {
