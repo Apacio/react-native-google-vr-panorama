@@ -93,7 +93,7 @@ If not specified, the original image size will be loaded.
 | `imageUrl` | `string` | Required | The URL of the image that the component should display | N/A |
 | `dimensions` | `object` | Optional | The dimensions of the image | `{ width: 0, height: 0 }` |
 | `inputType` | `number` | Optional | The input type for the image. One of `GoogleVRPanorama.inputType.mono`,
-| `showSterio` | `boolean` | Optional | If true the widget will display the google cadboard icon | false |
+| `showStereo` | `boolean` | Optional | If true the widget will display the google cadboard icon | false |
 | `showInfo` | `boolean` | Optional | If true the widget will display the google info icon | false |
 | `showFullScreen` | `boolean` | Optional | If true the widget will display the full screen icon | false | `GoogleVRPanorama.inputType.stereo` | `GoogleVRPanorama.inputType.mono` |
 

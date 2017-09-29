@@ -43,7 +43,7 @@ PanoramaView.propTypes = {
     height: React.PropTypes.number,
   }),
   inputType: React.PropTypes.number,
-  showSterio: React.PropTypes.bool,
+  showStereo: React.PropTypes.bool,
   showInfo: React.PropTypes.bool,
   showFullScreen: React.PropTypes.bool,
 
@@ -53,7 +53,7 @@ PanoramaView.propTypes = {
 
 PanoramaView.defaultProps = {
   inputType: inputType.mono,
-  showSterio: false,
+  showStereo: false,
   showInfo: false,
   showFullScreen: false,
 }
