@@ -63,7 +63,7 @@ public class RNGoogleVRPanoramaViewManager extends SimpleViewManager<RNGoogleVRP
     public void setStereo(RNGoogleVRPanoramaView view, boolean showStereo) {
         view.setStereo(showStereo);
     }
-    
+
     @ReactProp(name = "showInfo")
     public void setInfo(RNGoogleVRPanoramaView view, boolean showInfo) {
         view.setInfo(showInfo);

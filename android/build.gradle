@@ -47,5 +47,5 @@ dependencies {
     compile 'com.facebook.react:react-native:+'
     compile 'commons-io:commons-io:2.5'
 
-    compile 'com.google.vr:sdk-panowidget:1.10.0'
+    compile 'com.google.vr:sdk-panowidget:1.80.0'
 }
