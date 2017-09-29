@@ -43,6 +43,9 @@ PanoramaView.propTypes = {
     height: React.PropTypes.number,
   }),
   inputType: React.PropTypes.number,
+  showSterio: React.PropTypes.bool,
+  showInfo: React.PropTypes.bool,
+  showFullScreen: React.PropTypes.bool,
 
   onImageLoaded: React.PropTypes.func,
   onImageLoadingFailed: React.PropTypes.func,
@@ -50,6 +53,9 @@ PanoramaView.propTypes = {
 
 PanoramaView.defaultProps = {
   inputType: inputType.mono,
+  showSterio: false,
+  showInfo: false,
+  showFullScreen: false,
 }
 
 const RNGoogleVRPanoramaView = requireNativeComponent('RNGoogleVRPanorama', PanoramaView, {

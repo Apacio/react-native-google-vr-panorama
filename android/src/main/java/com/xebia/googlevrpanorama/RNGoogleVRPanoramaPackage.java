@@ -11,12 +11,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class RNGoogleVRPanoramaPackage implements ReactPackage {
-    // if react native < 47, open code
-   /* @Override
+    @Override
     public List<Class<? extends JavaScriptModule>> createJSModules() {
-      return Collections.emptyList();
+        return Collections.emptyList();
     }
-    */
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {

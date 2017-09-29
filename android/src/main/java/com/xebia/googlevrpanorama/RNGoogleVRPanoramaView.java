@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.support.annotation.UiThread;
 import android.util.Log;
 import android.util.Pair;
+import android.util.LruCache;
 import android.widget.RelativeLayout;
 
 import com.facebook.react.bridge.Arguments;
@@ -22,11 +23,15 @@ import com.google.vr.sdk.widgets.pano.VrPanoramaView.Options;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
+
+import java.lang.Runtime;
 
 import javax.annotation.Nullable;
 
@@ -34,19 +39,41 @@ import org.apache.commons.io.IOUtils;
 
 public class RNGoogleVRPanoramaView extends RelativeLayout {
     private static final String TAG = RNGoogleVRPanoramaView.class.getSimpleName();
-
+	
+    // public static Bitmap bitmap = null;
+	
+    // public Bitmap bitmap = null;
+    
     private android.os.Handler _handler;
     private RNGoogleVRPanoramaViewManager _manager;
     private Activity _activity;
 
     private VrPanoramaView panoWidgetView;
-    private Map<URL, Bitmap> imageCache = new HashMap<>();
+    
     private ImageLoaderTask imageLoaderTask;
     private Options panoOptions = new Options();
+    
+    private LruCache<String, Bitmap> mMemoryCache;
 
-    private URL imageUrl;
+    private URL imageUrl = null;
+    private String url;
+    
     private int imageWidth;
     private int imageHeight;
+    
+    private boolean showFullScreen = false;
+    private boolean showSterio = false;
+    private boolean showInfo = false;
+    
+    
+    private boolean isLocalUrl = false;
+	// Get max available VM memory, exceeding this amount will throw an
+	// OutOfMemory exception. Stored in kilobytes as LruCache takes an
+	// int in its constructor.
+	final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+
+	// Use 1/8th of the available memory for this memory cache.
+	final int cacheSize = maxMemory / 8;
 
     @UiThread
     public RNGoogleVRPanoramaView(Context context, RNGoogleVRPanoramaViewManager manager, Activity activity) {
@@ -54,14 +81,54 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
         _handler = new android.os.Handler();
         _manager = manager;
         _activity = activity;
+        
+        
+
+		mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+			@Override
+			protected int sizeOf(String key, Bitmap bitmap) {
+				// The cache size will be measured in kilobytes rather than
+				// number of items.
+				return bitmap.getByteCount() / 1024;
+			}
+		};
     }
+
+	public void setSterio(boolean showSterio) {
+		this.showSterio = showSterio;
+	}
+	
+	public void setInfo(boolean showInfo) {
+		this.showInfo = showInfo;
+	}
+	
+	public void setFullScreen(boolean showFullScreen) {
+		this.showFullScreen = showFullScreen;
+	}
+	
+	public void clear() {
+		/*
+		Log.d("Surya", "Clearing bitmap");
+		this.bitmap.recycle();
+		*/
+	}
+	
+	public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+		if (getBitmapFromMemCache(key) == null) {
+			mMemoryCache.put(key, bitmap);
+		}
+	}
+
+	public Bitmap getBitmapFromMemCache(String key) {
+		return mMemoryCache.get(key);
+	}
 
     public void onAfterUpdateTransaction() {
         panoWidgetView = new VrPanoramaView(_activity);
         panoWidgetView.setEventListener(new ActivityEventListener());
-        panoWidgetView.setStereoModeButtonEnabled(false);
-        panoWidgetView.setInfoButtonEnabled(false);
-        panoWidgetView.setFullscreenButtonEnabled(false);
+        panoWidgetView.setStereoModeButtonEnabled(showSterio);
+        panoWidgetView.setInfoButtonEnabled(showInfo);
+        panoWidgetView.setFullscreenButtonEnabled(showFullScreen);
         this.addView(panoWidgetView);
 
         if (imageLoaderTask != null) {
@@ -75,7 +142,17 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
         if (imageUrl != null && imageUrl.toString().equals(value)) { return; }
 
         try {
-            imageUrl = new URL(value);
+            
+            url = value;
+            String tmepUrl = value.replaceAll("^\\s*file://", "");
+            
+            if (url.length() > tmepUrl.length()) {
+				isLocalUrl = true;
+				url = tmepUrl;	
+			} else {
+				imageUrl = new URL(value);
+			}
+			
         } catch(MalformedURLException e) {}
     }
 
@@ -91,36 +168,82 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 
     class ImageLoaderTask extends AsyncTask<Pair<URL, Options>, Void, Boolean> {
         protected Boolean doInBackground(Pair<URL, Options>... fileInformation) {
+			
+			/*
+			if (RNGoogleVRPanoramaView.bitmap != null) {
+				RNGoogleVRPanoramaView.bitmap.recycle();
+				RNGoogleVRPanoramaView.bitmap = null;
+			}
+			*/
+			
+			
             final URL imageUrl = fileInformation[0].first;
             Options panoOptions = fileInformation[0].second;
 
             InputStream istr = null;
-            Bitmap image;
+            
+			
+			
+			Bitmap image = getBitmapFromMemCache(url);
+			if (image == null) {
+				if (!isLocalUrl) {
+					try {
+						HttpURLConnection connection = (HttpURLConnection) fileInformation[0].first.openConnection();
+						connection.connect();
+						istr = connection.getInputStream();
+						image = decodeSampledBitmap(istr);
+						
+					} catch (IOException e) {
+						Log.e(TAG, "Could not load file: " + e);
+						return false;
+					} finally {
+						try {
+							istr.close();
+						} catch (IOException e) {
+							Log.e(TAG, "Could not close input stream: " + e);
+						}
+					}
+				} else {
+					File imgFile = new  File(url);
 
-            if (!imageCache.containsKey(imageUrl)) {
-                try {
-                    HttpURLConnection connection = (HttpURLConnection) fileInformation[0].first.openConnection();
-                    connection.connect();
-
-                    istr = connection.getInputStream();
-
-                    imageCache.put(imageUrl, decodeSampledBitmap(istr));
-                } catch (IOException e) {
-                    Log.e(TAG, "Could not load file: " + e);
-                    return false;
-                } finally {
-                    try {
-                        istr.close();
-                    } catch (IOException e) {
-                        Log.e(TAG, "Could not close input stream: " + e);
-                    }
-                }
-            }
-
-            image = imageCache.get(imageUrl);
-
-            panoWidgetView.loadImageFromBitmap(image, panoOptions);
-
+					if(imgFile.exists()){
+						BitmapFactory.Options options = new BitmapFactory.Options();
+						if(imageWidth != 0 && imageHeight != 0) {
+							
+							// First decode with inJustDecodeBounds=true to check dimensions
+							options.inJustDecodeBounds = true;
+							BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
+							
+							// Calculate inSampleSize
+							options.inSampleSize = calculateInSampleSize(options, imageWidth, imageHeight);
+							
+							// Decode bitmap with inSampleSize set
+							// options.inPreferredConfig = Bitmap.Config.RGB_565;
+							options.inJustDecodeBounds = false;
+							
+						}
+						
+						image = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
+						
+						
+					} else {
+						Log.e(TAG, "File doesn't exist at path: " + url);
+					}
+					
+				}
+				if (image != null) {
+					addBitmapToMemoryCache(url, image);
+				}
+			}
+            
+			
+			if (image != null) {
+				//bitmap = image;
+				Bitmap temp = getBitmapFromMemCache(url);
+				//RNGoogleVRPanoramaView.bitmap = temp;
+				panoWidgetView.loadImageFromBitmap(temp, panoOptions);
+				
+			}
             return true;
         }
 

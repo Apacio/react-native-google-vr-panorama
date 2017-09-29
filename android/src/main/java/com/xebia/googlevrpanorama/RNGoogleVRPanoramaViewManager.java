@@ -6,10 +6,16 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.bridge.ReactMethod;
 
 import java.util.Map;
 
 import javax.annotation.Nullable;
+
+import android.util.Log;
+
+
+
 
 public class RNGoogleVRPanoramaViewManager extends SimpleViewManager<RNGoogleVRPanoramaView> {
     private static final String REACT_CLASS = "RNGoogleVRPanorama";
@@ -52,6 +58,21 @@ public class RNGoogleVRPanoramaViewManager extends SimpleViewManager<RNGoogleVRP
     public void setImageUrl(RNGoogleVRPanoramaView view, String imageUrl) {
         view.setImageUrl(imageUrl);
     }
+    
+    @ReactProp(name = "showSterio")
+    public void setSterio(RNGoogleVRPanoramaView view, boolean showSterio) {
+        view.setSterio(showSterio);
+    }
+    
+    @ReactProp(name = "showInfo")
+    public void setInfo(RNGoogleVRPanoramaView view, boolean showInfo) {
+        view.setInfo(showInfo);
+    }
+    
+    @ReactProp(name = "showFullScreen")
+    public void setFullScreen(RNGoogleVRPanoramaView view, boolean showFullScreen) {
+        view.setFullScreen(showFullScreen);
+    }
 
     @ReactProp(name = "dimensions")
     public void setDimensions(RNGoogleVRPanoramaView view, ReadableMap dimensions) {
@@ -63,5 +84,10 @@ public class RNGoogleVRPanoramaViewManager extends SimpleViewManager<RNGoogleVRP
     @ReactProp(name = "inputType")
     public void setInputType(RNGoogleVRPanoramaView view, int type) {
         view.setInputType(RNGoogleVRPanoramaNativeModule.inputTypes[type]);
+    }
+    
+    @ReactMethod
+    public void clear() {
+        Log.d("RNGoogleVRPanorama", "clear called");
     }
 }
