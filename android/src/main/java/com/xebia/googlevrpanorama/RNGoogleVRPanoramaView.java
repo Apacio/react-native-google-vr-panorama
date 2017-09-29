@@ -62,7 +62,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
     private int imageHeight;
     
     private boolean showFullScreen = false;
-    private boolean showSterio = false;
+    private boolean showStereo = false;
     private boolean showInfo = false;
     
     
@@ -94,8 +94,8 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 		};
     }
 
-	public void setSterio(boolean showSterio) {
-		this.showSterio = showSterio;
+	public void setStereo(boolean showStereo) {
+		this.showStereo = showStereo;
 	}
 	
 	public void setInfo(boolean showInfo) {
@@ -126,7 +126,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
     public void onAfterUpdateTransaction() {
         panoWidgetView = new VrPanoramaView(_activity);
         panoWidgetView.setEventListener(new ActivityEventListener());
-        panoWidgetView.setStereoModeButtonEnabled(showSterio);
+        panoWidgetView.setStereoModeButtonEnabled(showStereo);
         panoWidgetView.setInfoButtonEnabled(showInfo);
         panoWidgetView.setFullscreenButtonEnabled(showFullScreen);
         this.addView(panoWidgetView);
