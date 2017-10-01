@@ -13,7 +13,6 @@ import android.widget.RelativeLayout;
 import android.content.res.AssetManager;
 
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
@@ -168,6 +167,13 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 			}
 			*/
 
+			// variable to hold context
+            private Context context;
+
+            public ImageLoaderTask(Context context){
+                this.context=context;
+            }
+
 
             final URL imageUrl = fileInformation[0].first;
             Options panoOptions = fileInformation[0].second;
@@ -199,7 +205,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 						}
 					}
 				} else {
-				    AssetManager assetManager = getReactApplicationContext().getAssets();
+				    AssetManager assetManager = context.getAssets();
 					imgFile = assetManager.open(url);
 
 					Log.d(TAG, "Image doesn't exist: " + url);
