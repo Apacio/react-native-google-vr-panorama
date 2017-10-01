@@ -10,7 +10,6 @@ import android.util.Log;
 import android.util.Pair;
 import android.util.LruCache;
 import android.widget.RelativeLayout;
-import android.util.Base64;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -56,7 +55,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
     
     private LruCache<String, Bitmap> mMemoryCache;
 
-    private int imageUrl = 0;
+    private URL imageUrl = null;
     private String url;
 
     private int imageWidth;
@@ -131,13 +130,19 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
         panoWidgetView.setInfoButtonEnabled(showInfo);
         panoWidgetView.setFullscreenButtonEnabled(showFullScreen);
         this.addView(panoWidgetView);
+
+        if (imageLoaderTask != null) {
+            imageLoaderTask.cancel(true);
+        }
+        imageLoaderTask = new ImageLoaderTask();
+        imageLoaderTask.execute(Pair.create(imageUrl, panoOptions));
     }
 
-    public void setImageUrl(int value) {
-        if (imageUrl != 0) { return; }
+    public void setImageUrl(String value) {
+        if (imageUrl != null && imageUrl.toString().equals(value)) { return; }
 
-        Bitmap finalimage = BitmapFactory.decodeByteArray(value, 0, value.length);
-        panoWidgetView.loadImageFromBitmap(finalimage, panoOptions);
+        url = new URL(value);
+        isLocalUrl = true;
 
     }
 

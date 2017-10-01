@@ -13,7 +13,6 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import android.util.Log;
-import android.util.Base64;
 
 
 
@@ -56,11 +55,8 @@ public class RNGoogleVRPanoramaViewManager extends SimpleViewManager<RNGoogleVRP
     }
 
     @ReactProp(name = "imageUrl")
-    public void setImageUrl(RNGoogleVRPanoramaView view, int imageUrl) {
-
-        byte[] data = imageUrl.getBytes();
-
-        view.setImageUrl(data);
+    public void setImageUrl(RNGoogleVRPanoramaView view, String imageUrl) {
+        view.setImageUrl(imageUrl);
     }
     
     @ReactProp(name = "showStereo")
