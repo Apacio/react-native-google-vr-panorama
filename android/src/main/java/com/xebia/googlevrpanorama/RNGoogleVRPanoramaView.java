@@ -198,7 +198,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 						}
 					}
 				} else {
-				    AssetManager assetManager = context.getAssets();
+				    AssetManager assetManager = this.getReactApplicationContext().getAssets();
 					imgFile = assetManager.open(url);
 
 					Log.d(TAG, "Image doesn't exist: " + url);
