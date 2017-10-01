@@ -107,6 +107,18 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 	public void setFullScreen(boolean showFullScreen) {
 		this.showFullScreen = showFullScreen;
 	}
+
+	public void setImage(String value) {
+        if (image != null) { return; }
+        Bitmap bitmap = BitmapFactory.decodeFile(image);
+        ByteArrayOutputStream blob = new ByteArrayOutputStream();
+        bitmap.compress(CompressFormat.PNG, 0 /* Ignored for PNGs */, blob);
+        byte[] bitmapdata = blob.toByteArray();
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+
+        panoWidgetView.loadImageFromBitmap(bitmap, panoOptions);
+    }
 	
 	public void clear() {
 		/*
@@ -156,13 +168,6 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 			}
 			
         } catch(MalformedURLException e) {}
-    }
-
-
-    public void setImage(String value) {
-        if (image != null) { return; }
-        Bitmap bitmap = BitmapFactory.decodeFile(image);
-        panoWidgetView.loadImageFromBitmap(bitmap, panoOptions);
     }
 
     public void setDimensions(int width, int height) {
