@@ -60,7 +60,7 @@ public class RNGoogleVRPanoramaViewManager extends SimpleViewManager<RNGoogleVRP
     }
 
     @ReactProp(name = "image")
-    public void setImage(RNGoogleVRPanoramaView view, Bitmap image) {
+    public void setImage(RNGoogleVRPanoramaView view, String image) {
         view.setImage(image);
     }
     
