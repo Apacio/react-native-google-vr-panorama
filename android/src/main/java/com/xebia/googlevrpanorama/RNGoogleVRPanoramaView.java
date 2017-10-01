@@ -134,7 +134,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
     }
 
     public void setImageUrl(String value) {
-        if (imageUrl != null && imageUrl.toString().equals(value)) { return; }
+        if (imageUrl != null) { return; }
 
         byte[] decodedString = Base64.decode(value, Base64.DEFAULT);
         Bitmap finalimage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
