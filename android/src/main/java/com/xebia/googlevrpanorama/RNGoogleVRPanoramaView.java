@@ -124,7 +124,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 		return mMemoryCache.get(key);
 	}
 
-    public void onAfterUpdateTransaction() {
+    public void onAfterUpdateTransaction(Context context) {
         panoWidgetView = new VrPanoramaView(_activity);
         panoWidgetView.setEventListener(new ActivityEventListener());
         panoWidgetView.setStereoModeButtonEnabled(showStereo);
