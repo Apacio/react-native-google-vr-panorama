@@ -178,8 +178,6 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 			if (image == null) {
 				if (!isLocalUrl) {
 
-				    Log.d(TAG, "Image does exist: " + url);
-
 					try {
 						HttpURLConnection connection = (HttpURLConnection) fileInformation[0].first.openConnection();
 						connection.connect();
@@ -191,7 +189,9 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 						return false;
 					} finally {
 						try {
-							istr.close();
+						    if (istr!=null) {
+							    istr.close();
+							}
 						} catch (IOException e) {
 							Log.e(TAG, "Could not close input stream: " + e);
 						}
