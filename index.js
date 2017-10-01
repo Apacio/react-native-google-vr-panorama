@@ -38,7 +38,7 @@ class PanoramaView extends React.Component {
 PanoramaView.propTypes = {
   ...View.propTypes,
 
-  image: React.PropTypes.string,
+  image: Image.propTypes.source,
   imageUrl: React.PropTypes.string,
   dimensions: React.PropTypes.shape({
     width: React.PropTypes.number,

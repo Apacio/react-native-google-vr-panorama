@@ -57,7 +57,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
     private URL imageUrl = null;
     private String url;
 
-    private String image = null;
+    private Bitmap image = null;
 
     private int imageWidth;
     private int imageHeight;
@@ -107,13 +107,8 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 		this.showFullScreen = showFullScreen;
 	}
 
-	public void setImage(String image) {
+	public void setImage(Bitmap image) {
         if (image != null) { return; }
-        Bitmap bitmap = BitmapFactory.decodeFile(image);
-        ByteArrayOutputStream blob = new ByteArrayOutputStream();
-        byte[] bitmapdata = blob.toByteArray();
-
-        Bitmap finalimage = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
 
         panoWidgetView.loadImageFromBitmap(finalimage, panoOptions);
     }
