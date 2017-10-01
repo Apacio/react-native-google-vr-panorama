@@ -208,7 +208,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 				    AssetManager assetManager = mContext.getAssets();
 
 				    try {
-                      image = assetManager.open(url);
+                      image = assetManager.open(imageUrl);
                       panoOptions = new Options();
                       panoOptions.inputType = Options.TYPE_STEREO_OVER_UNDER;
                     } catch (IOException e) {
