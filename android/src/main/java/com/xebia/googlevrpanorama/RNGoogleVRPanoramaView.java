@@ -146,7 +146,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
             url = value;
             isLocalUrl = true;
 			
-        } catch(MalformedURLException e) {
+        } catch (MalformedURLException e) {
             Log.e(TAG, "Could not use this ImageUrl: " + e);
         }
     }
