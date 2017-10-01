@@ -171,7 +171,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
             Options panoOptions = fileInformation[0].second;
 
             InputStream istr = null;
-
+            Log.d(TAG, "Image loader task is called: " + url);
 
 
 			Bitmap image = getBitmapFromMemCache(url);
@@ -227,6 +227,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 
 				}
 				if (image != null) {
+				    Log.d(TAG, "Image does exist: " + url);
 					addBitmapToMemoryCache(url, image);
 				}
 			}
@@ -234,6 +235,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 
 			if (image != null) {
 				//bitmap = image;
+				Log.d(TAG, "Image does exist, so we're adding it to the pano: " + url);
 				Bitmap temp = getBitmapFromMemCache(url);
 				//RNGoogleVRPanoramaView.bitmap = temp;
 				panoWidgetView.loadImageFromBitmap(temp, panoOptions);
