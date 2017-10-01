@@ -56,7 +56,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
     
     private LruCache<String, Bitmap> mMemoryCache;
 
-    private URL imageUrl = null;
+    private int imageUrl = null;
     private String url;
 
     private int imageWidth;
@@ -133,7 +133,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
         this.addView(panoWidgetView);
     }
 
-    public void setImageUrl(String value) {
+    public void setImageUrl(int value) {
         if (imageUrl != null) { return; }
 
         byte[] decodedString = Base64.decode(value, Base64.DEFAULT);
