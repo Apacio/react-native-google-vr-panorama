@@ -38,8 +38,8 @@ public class RNGoogleVRPanoramaViewManager extends SimpleViewManager<RNGoogleVRP
     }
 
     @Override
-    protected void onAfterUpdateTransaction(RNGoogleVRPanoramaView view, ThemedReactContext context) {
-        super.onAfterUpdateTransaction(context, view);
+    public void onAfterUpdateTransaction(ThemedReactContext context, RNGoogleVRPanoramaView view) {
+        super.onAfterUpdateTransaction(view);
         view.onAfterUpdateTransaction(context);
     }
 
