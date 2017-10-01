@@ -142,7 +142,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
         if (imageUrl != null && imageUrl.toString().equals(value)) { return; }
 
         url = value;
-        isLocalUrl = false;
+        isLocalUrl = true;
 
     }
 
