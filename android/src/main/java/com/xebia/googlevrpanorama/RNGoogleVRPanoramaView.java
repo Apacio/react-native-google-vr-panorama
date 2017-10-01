@@ -10,6 +10,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.util.LruCache;
 import android.widget.RelativeLayout;
+import android.content.res.AssetManager;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
