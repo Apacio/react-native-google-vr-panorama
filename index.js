@@ -39,7 +39,7 @@ PanoramaView.propTypes = {
   ...View.propTypes,
 
   image: Image.propTypes.source,
-  imageUrl: React.PropTypes.string.isRequired,
+  imageUrl: React.PropTypes.string,
   dimensions: React.PropTypes.shape({
     width: React.PropTypes.number,
     height: React.PropTypes.number,

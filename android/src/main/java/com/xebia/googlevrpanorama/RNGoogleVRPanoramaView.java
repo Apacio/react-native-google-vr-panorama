@@ -58,6 +58,8 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
     private URL imageUrl = null;
     private String url;
 
+    private String image = null;
+
     private int imageWidth;
     private int imageHeight;
     
