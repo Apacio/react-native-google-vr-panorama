@@ -209,9 +209,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 
 				    try {
                       istr = assetManager.open(url);
-                      image = BitmapFactory.decodeStream(istr)
-                      panoOptions = new Options();
-                      panoOptions.inputType = Options.TYPE_STEREO_OVER_UNDER;
+                      image = BitmapFactory.decodeStream(istr);
                     } catch (IOException e) {
                       Log.e(TAG, "Could not decode default bitmap: " + e);
                       return false;
