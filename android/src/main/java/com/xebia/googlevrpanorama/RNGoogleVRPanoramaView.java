@@ -107,7 +107,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 		this.showFullScreen = showFullScreen;
 	}
 
-	public void setImage(String value) {
+	public void setImage(String image) {
         if (image != null) { return; }
         Bitmap bitmap = BitmapFactory.decodeFile(image);
         ByteArrayOutputStream blob = new ByteArrayOutputStream();
