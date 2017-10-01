@@ -130,19 +130,14 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
         panoWidgetView.setInfoButtonEnabled(showInfo);
         panoWidgetView.setFullscreenButtonEnabled(showFullScreen);
         this.addView(panoWidgetView);
-
-        if (imageLoaderTask != null) {
-            imageLoaderTask.cancel(true);
-        }
-        imageLoaderTask = new ImageLoaderTask();
-        imageLoaderTask.execute(Pair.create(imageUrl, panoOptions));
     }
 
     public void setImageUrl(String value) {
         if (imageUrl != null && imageUrl.toString().equals(value)) { return; }
 
-        url = value;
-        isLocalUrl = true;
+        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+        Bitmap finalimage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        panoWidgetView.loadImageFromBitmap(finalimage, panoOptions);
 
     }
 
@@ -207,7 +202,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 
 							// First decode with inJustDecodeBounds=true to check dimensions
 							options.inJustDecodeBounds = true;
-							BitmapFactory.decodeFile(imgFile.getPath(), options);
+							BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
 
 							// Calculate inSampleSize
 							options.inSampleSize = calculateInSampleSize(options, imageWidth, imageHeight);
@@ -218,7 +213,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 
 						}
 
-						image = BitmapFactory.decodeFile(imgFile.getPath(), options);
+						image = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
 
 
 					} else {
