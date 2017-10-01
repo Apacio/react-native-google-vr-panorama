@@ -206,33 +206,15 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 					}
 				} else {
 				    AssetManager assetManager = mContext.getAssets();
-					imgFile = assetManager.open(url);
 
-					Log.d(TAG, "Image doesn't exist: " + url);
-
-					if(imgFile.exists()){
-						BitmapFactory.Options options = new BitmapFactory.Options();
-						if(imageWidth != 0 && imageHeight != 0) {
-
-							// First decode with inJustDecodeBounds=true to check dimensions
-							options.inJustDecodeBounds = true;
-							BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
-
-							// Calculate inSampleSize
-							options.inSampleSize = calculateInSampleSize(options, imageWidth, imageHeight);
-
-							// Decode bitmap with inSampleSize set
-							// options.inPreferredConfig = Bitmap.Config.RGB_565;
-							options.inJustDecodeBounds = false;
-
-						}
-
-						image = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
-
-
-					} else {
-						Log.e(TAG, "File doesn't exist at path: " + url);
-					}
+				    try {
+                      image = assetManager.open(url);
+                      panoOptions = new Options();
+                      panoOptions.inputType = Options.TYPE_STEREO_OVER_UNDER;
+                    } catch (IOException e) {
+                      Log.e(TAG, "Could not decode default bitmap: " + e);
+                      return false;
+                    }
 
 				}
 				if (image != null) {
