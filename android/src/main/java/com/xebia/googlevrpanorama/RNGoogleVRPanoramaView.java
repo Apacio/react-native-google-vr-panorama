@@ -110,7 +110,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 	public void setImage(Bitmap image) {
         if (image != null) { return; }
 
-        panoWidgetView.loadImageFromBitmap(finalimage, panoOptions);
+        panoWidgetView.loadImageFromBitmap(image, panoOptions);
     }
 	
 	public void clear() {
