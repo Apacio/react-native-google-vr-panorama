@@ -38,9 +38,9 @@ public class RNGoogleVRPanoramaViewManager extends SimpleViewManager<RNGoogleVRP
     }
 
     @Override
-    protected void onAfterUpdateTransaction(RNGoogleVRPanoramaView view) {
+    protected void onAfterUpdateTransaction(RNGoogleVRPanoramaView view, Context context) {
         super.onAfterUpdateTransaction(view);
-        view.onAfterUpdateTransaction(Context context);
+        view.onAfterUpdateTransaction(context);
     }
 
     public @Nullable Map<String, Object> getExportedCustomDirectEventTypeConstants() {
