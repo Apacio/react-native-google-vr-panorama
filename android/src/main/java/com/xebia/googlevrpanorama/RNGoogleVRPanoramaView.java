@@ -156,6 +156,13 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
         } catch(MalformedURLException e) {}
     }
 
+
+    public void setImage(String value) {
+        if (image != null) { return; }
+        Bitmap bitmap = BitmapFactory.decodeFile(image);
+        panoWidgetView.loadImageFromBitmap(bitmap);
+    }
+
     public void setDimensions(int width, int height) {
         this.imageWidth = width;
         this.imageHeight = height;
