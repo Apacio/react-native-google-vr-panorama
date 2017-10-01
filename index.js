@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react'
 import {
   View,
   NativeModules,
-  Image,
   requireNativeComponent
 } from 'react-native'
 
@@ -37,7 +36,8 @@ class PanoramaView extends React.Component {
 
 PanoramaView.propTypes = {
   ...View.propTypes,
-  imageUrl: Image.propTypes.source,
+
+  imageUrl: React.PropTypes.string.isRequired,
   dimensions: React.PropTypes.shape({
     width: React.PropTypes.number,
     height: React.PropTypes.number,
