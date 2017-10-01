@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import android.util.Log;
+import android.content.Context;
 
 
 
@@ -38,9 +39,9 @@ public class RNGoogleVRPanoramaViewManager extends SimpleViewManager<RNGoogleVRP
     }
 
     @Override
-    public void onAfterUpdateTransaction(ReactApplicationContext context, RNGoogleVRPanoramaView view) {
+    protected void onAfterUpdateTransaction(Context context, RNGoogleVRPanoramaView view) {
         super.onAfterUpdateTransaction(view);
-        view.onAfterUpdateTransaction();
+        view.onAfterUpdateTransaction(context);
     }
 
     public @Nullable Map<String, Object> getExportedCustomDirectEventTypeConstants() {
