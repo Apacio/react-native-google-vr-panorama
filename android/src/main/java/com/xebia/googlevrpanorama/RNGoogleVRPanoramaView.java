@@ -197,7 +197,8 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 						}
 					}
 				} else {
-					Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.url);
+				    int id = getResources().getIdentifier(url, "drawable", getPackageName());
+					Bitmap imgFile = BitmapFactory.decodeResource(getResources(), R.drawable.id);
 
 					Log.d(TAG, "Image doesn't exist: " + url);
 
