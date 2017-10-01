@@ -142,7 +142,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
         if (imageUrl != null && imageUrl.toString().equals(value)) { return; }
 
         url = value;
-        isLocalUrl = true;
+        isLocalUrl = false;
 
     }
 
@@ -197,7 +197,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 						}
 					}
 				} else {
-					File imgFile = new File(url);
+					File imgFile = getClass().getClassLoader().getResource(url);
 
 					Log.d(TAG, "Image doesn't exist: " + url);
 
