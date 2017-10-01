@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import {
   View,
   NativeModules,
+  Image,
   requireNativeComponent
 } from 'react-native'
 
