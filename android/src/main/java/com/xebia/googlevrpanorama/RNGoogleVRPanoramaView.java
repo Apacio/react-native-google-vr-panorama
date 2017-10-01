@@ -177,6 +177,9 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 			Bitmap image = getBitmapFromMemCache(url);
 			if (image == null) {
 				if (!isLocalUrl) {
+
+				    Log.d(TAG, "Image does exist: " + url);
+
 					try {
 						HttpURLConnection connection = (HttpURLConnection) fileInformation[0].first.openConnection();
 						connection.connect();
@@ -195,6 +198,8 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 					}
 				} else {
 					File imgFile = new File(url);
+
+					Log.d(TAG, "Image doesn't exist: " + url);
 
 					if(imgFile.exists()){
 						BitmapFactory.Options options = new BitmapFactory.Options();
