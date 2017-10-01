@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import android.util.Log;
+import android.util.Base64;
 
 
 
