@@ -209,7 +209,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 
 				    try {
                       istr = assetManager.open(url);
-                      image = BitmapFactory.decodeStream(istr);
+                      image = BitmapFactory.decodeStream(istr)
                     } catch (IOException e) {
                       Log.e(TAG, "Could not decode default bitmap: " + e);
                       return false;
@@ -228,13 +228,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 				Log.d(TAG, "Image does exist, so we're adding it to the pano: " + url);
 				Bitmap temp = getBitmapFromMemCache(url);
 				//RNGoogleVRPanoramaView.bitmap = temp;
-				panoWidgetView.loadImageFromBitmap(image, panoOptions);
-
-				try {
-                  istr.close();
-                } catch (IOException e) {
-                  Log.e(TAG, "Could not close input stream: " + e);
-                }
+				panoWidgetView.loadImageFromBitmap(temp, panoOptions);
 
 			}
             return true;
