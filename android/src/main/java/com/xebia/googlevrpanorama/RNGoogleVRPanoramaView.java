@@ -66,7 +66,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
     private boolean showInfo = false;
     
     
-    private boolean isLocalUrl = true;
+    private boolean isLocalUrl = false;
 	// Get max available VM memory, exceeding this amount will throw an
 	// OutOfMemory exception. Stored in kilobytes as LruCache takes an
 	// int in its constructor.
