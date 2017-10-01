@@ -112,7 +112,6 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
         if (image != null) { return; }
         Bitmap bitmap = BitmapFactory.decodeFile(image);
         ByteArrayOutputStream blob = new ByteArrayOutputStream();
-        bitmap.compress(CompressFormat.PNG, 0 /* Ignored for PNGs */, blob);
         byte[] bitmapdata = blob.toByteArray();
 
         Bitmap finalimage = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
