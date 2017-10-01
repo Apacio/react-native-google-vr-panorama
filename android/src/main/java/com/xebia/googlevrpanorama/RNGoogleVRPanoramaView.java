@@ -141,14 +141,9 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
     public void setImageUrl(String value) {
         if (imageUrl != null && imageUrl.toString().equals(value)) { return; }
 
-        try {
-            
-            url = value;
-            isLocalUrl = true;
-			
-        } catch (MalformedURLException e) {
-            Log.e(TAG, "Could not use this ImageUrl: " + e);
-        }
+        url = value;
+        isLocalUrl = true;
+
     }
 
     public void setDimensions(int width, int height) {
