@@ -135,7 +135,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
         if (imageLoaderTask != null) {
             imageLoaderTask.cancel(true);
         }
-        imageLoaderTask = new ImageLoaderTask();
+        imageLoaderTask = new ImageLoaderTask(context);
         imageLoaderTask.execute(Pair.create(imageUrl, panoOptions));
     }
 
@@ -158,6 +158,13 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
     }
 
     class ImageLoaderTask extends AsyncTask<Pair<URL, Options>, Void, Boolean> {
+
+        private Context mContext;
+
+        public ImageLoaderTask (Context context){
+             mContext = context;
+        }
+
         protected Boolean doInBackground(Pair<URL, Options>... fileInformation) {
 
 			/*
@@ -166,13 +173,6 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 				RNGoogleVRPanoramaView.bitmap = null;
 			}
 			*/
-
-			// variable to hold context
-            Context context;
-
-            ImageLoaderTask(context){
-                this.context=context;
-            }
 
 
             final URL imageUrl = fileInformation[0].first;
@@ -205,7 +205,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 						}
 					}
 				} else {
-				    AssetManager assetManager = context.getAssets();
+				    AssetManager assetManager = mContext.getAssets();
 					imgFile = assetManager.open(url);
 
 					Log.d(TAG, "Image doesn't exist: " + url);
