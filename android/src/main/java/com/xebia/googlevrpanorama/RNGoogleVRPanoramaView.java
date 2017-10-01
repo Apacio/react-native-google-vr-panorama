@@ -168,7 +168,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 			*/
 
 			// variable to hold context
-            private Context context;
+            Context context;
 
             public ImageLoaderTask(Context context){
                 this.context=context;
