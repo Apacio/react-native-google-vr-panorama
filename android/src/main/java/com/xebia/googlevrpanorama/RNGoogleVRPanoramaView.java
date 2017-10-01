@@ -50,14 +50,13 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 
     private VrPanoramaView panoWidgetView;
 
+    private ImageLoaderTask imageLoaderTask;
     private Options panoOptions = new Options();
     
     private LruCache<String, Bitmap> mMemoryCache;
 
     private URL imageUrl = null;
     private String url;
-
-    private Bitmap image = null;
 
     private int imageWidth;
     private int imageHeight;
@@ -106,12 +105,6 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 	public void setFullScreen(boolean showFullScreen) {
 		this.showFullScreen = showFullScreen;
 	}
-
-	public void setImage(Bitmap image) {
-        if (image != null) { return; }
-
-        panoWidgetView.loadImageFromBitmap(image, panoOptions);
-    }
 	
 	public void clear() {
 		/*
@@ -137,6 +130,12 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
         panoWidgetView.setInfoButtonEnabled(showInfo);
         panoWidgetView.setFullscreenButtonEnabled(showFullScreen);
         this.addView(panoWidgetView);
+
+        if (imageLoaderTask != null) {
+            imageLoaderTask.cancel(true);
+        }
+        imageLoaderTask = new ImageLoaderTask();
+        imageLoaderTask.execute(Pair.create(imageUrl, panoOptions));
     }
 
     public void setImageUrl(String value) {
@@ -145,16 +144,11 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
         try {
             
             url = value;
-            String tmepUrl = value.replaceAll("^\\s*file://", "");
-            
-            if (url.length() > tmepUrl.length()) {
-				isLocalUrl = true;
-				url = tmepUrl;	
-			} else {
-				imageUrl = new URL(value);
-			}
+            isLocalUrl = true;
 			
-        } catch(MalformedURLException e) {}
+        } catch(MalformedURLException e) {
+            Log.e(TAG, "Could not use this ImageUrl: " + e);
+        }
     }
 
     public void setDimensions(int width, int height) {
@@ -165,6 +159,134 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
     public void setInputType(int value) {
         if (panoOptions.inputType == value) { return; }
         panoOptions.inputType = value;
+    }
+
+    class ImageLoaderTask extends AsyncTask<Pair<URL, Options>, Void, Boolean> {
+        protected Boolean doInBackground(Pair<URL, Options>... fileInformation) {
+
+			/*
+			if (RNGoogleVRPanoramaView.bitmap != null) {
+				RNGoogleVRPanoramaView.bitmap.recycle();
+				RNGoogleVRPanoramaView.bitmap = null;
+			}
+			*/
+
+
+            final URL imageUrl = fileInformation[0].first;
+            Options panoOptions = fileInformation[0].second;
+
+            InputStream istr = null;
+
+
+
+			Bitmap image = getBitmapFromMemCache(url);
+			if (image == null) {
+				if (!isLocalUrl) {
+					try {
+						HttpURLConnection connection = (HttpURLConnection) fileInformation[0].first.openConnection();
+						connection.connect();
+						istr = connection.getInputStream();
+						image = decodeSampledBitmap(istr);
+
+					} catch (IOException e) {
+						Log.e(TAG, "Could not load file: " + e);
+						return false;
+					} finally {
+						try {
+							istr.close();
+						} catch (IOException e) {
+							Log.e(TAG, "Could not close input stream: " + e);
+						}
+					}
+				} else {
+					File imgFile = new File(url);
+
+					if(imgFile.exists()){
+						BitmapFactory.Options options = new BitmapFactory.Options();
+						if(imageWidth != 0 && imageHeight != 0) {
+
+							// First decode with inJustDecodeBounds=true to check dimensions
+							options.inJustDecodeBounds = true;
+							BitmapFactory.decodeFile(imgFile.getPath(), options);
+
+							// Calculate inSampleSize
+							options.inSampleSize = calculateInSampleSize(options, imageWidth, imageHeight);
+
+							// Decode bitmap with inSampleSize set
+							// options.inPreferredConfig = Bitmap.Config.RGB_565;
+							options.inJustDecodeBounds = false;
+
+						}
+
+						image = BitmapFactory.decodeFile(imgFile.getPath(), options);
+
+
+					} else {
+						Log.e(TAG, "File doesn't exist at path: " + url);
+					}
+
+				}
+				if (image != null) {
+					addBitmapToMemoryCache(url, image);
+				}
+			}
+
+
+			if (image != null) {
+				//bitmap = image;
+				Bitmap temp = getBitmapFromMemCache(url);
+				//RNGoogleVRPanoramaView.bitmap = temp;
+				panoWidgetView.loadImageFromBitmap(temp, panoOptions);
+
+			}
+            return true;
+        }
+
+        private Bitmap decodeSampledBitmap(InputStream inputStream) throws IOException {
+            final byte[] bytes = getBytesFromInputStream(inputStream);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+
+            if(imageWidth != 0 && imageHeight != 0) {
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+
+                options.inSampleSize = calculateInSampleSize(options, imageWidth, imageHeight);
+                options.inJustDecodeBounds = false;
+            }
+
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+        }
+
+        private byte[] getBytesFromInputStream(InputStream inputStream) throws IOException {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            IOUtils.copy(inputStream, baos);
+
+            return baos.toByteArray();
+        }
+
+        private int calculateInSampleSize(
+                BitmapFactory.Options options, int reqWidth, int reqHeight) {
+            // Raw height and width of image
+            final int height = options.outHeight;
+            final int width = options.outWidth;
+            int inSampleSize = 1;
+
+            if (height > reqHeight || width > reqWidth) {
+
+                final int halfHeight = height / 2;
+                final int halfWidth = width / 2;
+
+                // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+                // height and width larger than the requested height and width.
+                while ((halfHeight / inSampleSize) > reqHeight
+                        && (halfWidth / inSampleSize) > reqWidth) {
+                    inSampleSize *= 2;
+                }
+            }
+
+            return inSampleSize;
+        }
     }
 
     private class ActivityEventListener extends VrPanoramaEventListener {

@@ -2,8 +2,7 @@ import React, { PropTypes } from 'react'
 import {
   View,
   NativeModules,
-  requireNativeComponent,
-  Image
+  requireNativeComponent
 } from 'react-native'
 
 const { GoogleVRPanoramaManager } = NativeModules
@@ -38,8 +37,7 @@ class PanoramaView extends React.Component {
 PanoramaView.propTypes = {
   ...View.propTypes,
 
-  image: Image.propTypes.source,
-  imageUrl: React.PropTypes.string,
+  imageUrl: React.PropTypes.string.isRequired,
   dimensions: React.PropTypes.shape({
     width: React.PropTypes.number,
     height: React.PropTypes.number,

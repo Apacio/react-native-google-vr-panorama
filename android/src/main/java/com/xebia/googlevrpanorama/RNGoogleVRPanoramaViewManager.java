@@ -58,11 +58,6 @@ public class RNGoogleVRPanoramaViewManager extends SimpleViewManager<RNGoogleVRP
     public void setImageUrl(RNGoogleVRPanoramaView view, String imageUrl) {
         view.setImageUrl(imageUrl);
     }
-
-    @ReactProp(name = "image")
-    public void setImage(RNGoogleVRPanoramaView view, Bitmap image) {
-        view.setImage(image);
-    }
     
     @ReactProp(name = "showStereo")
     public void setStereo(RNGoogleVRPanoramaView view, boolean showStereo) {
