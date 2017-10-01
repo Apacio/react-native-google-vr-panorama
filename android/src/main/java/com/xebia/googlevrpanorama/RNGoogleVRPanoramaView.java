@@ -49,8 +49,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
     private Activity _activity;
 
     private VrPanoramaView panoWidgetView;
-    
-    private ImageLoaderTask imageLoaderTask;
+
     private Options panoOptions = new Options();
     
     private LruCache<String, Bitmap> mMemoryCache;
