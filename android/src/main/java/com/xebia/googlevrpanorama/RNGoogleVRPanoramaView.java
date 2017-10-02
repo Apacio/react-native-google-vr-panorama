@@ -228,7 +228,7 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
 				Log.d(TAG, "Image does exist, so we're adding it to the pano: " + url);
 				Bitmap temp = getBitmapFromMemCache(url);
 				//RNGoogleVRPanoramaView.bitmap = temp;
-				panoWidgetView.loadImageFromBitmap(temp, panoOptions);
+				panoWidgetView.loadImageFromBitmap(image, panoOptions);
 
 			}
             return true;
