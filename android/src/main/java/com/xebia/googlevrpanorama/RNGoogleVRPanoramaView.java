@@ -216,19 +216,20 @@ public class RNGoogleVRPanoramaView extends RelativeLayout {
                     }
 
 				}
-				if (image != null) {
-				    Log.d(TAG, "Image does exist: " + url);
-					addBitmapToMemoryCache(url, image);
-				}
 			}
 
 
 			if (image != null) {
 				//bitmap = image;
 				Log.d(TAG, "Image does exist, so we're adding it to the pano: " + url);
-				Bitmap temp = getBitmapFromMemCache(url);
+				//Bitmap temp = getBitmapFromMemCache(url);
 				//RNGoogleVRPanoramaView.bitmap = temp;
 				panoWidgetView.loadImageFromBitmap(image, panoOptions);
+				try {
+                  istr.close();
+                } catch (IOException e) {
+                  Log.e(TAG, "Could not close input stream: " + e);
+                }
 
 			}
             return true;
